@@ -82,6 +82,24 @@ API Create Campaign
     &{campaign} =     Salesforce Get  Campaign  ${campaign_id}
     [return]         &{campaign}
 
+API Create Lead
+    [Documentation]  If no arguments are passed, this keyword will create a lead with first name, last name,
+    ...              and company as random strings. This keyword returns the lead dictionary when called.
+    ...              Syntax for passing parameters:
+    ...
+    ...              | field_api_name=value   | Ex: MobilePhone=1234567098    |
+    [Arguments]      &{fields}
+    ${first_name} =  Generate Random String
+    ${last_name} =   Generate Random String
+    ${lead_company} =  Generate Random String
+    &{lead_id} =  Salesforce Insert  Lead
+    ...             FirstName=${first_name}
+    ...             LastName=${last_name}
+    ...             Company=${lead_company}
+    ...             &{fields}
+    &{lead} =     Salesforce Get  Lead  ${lead_id}
+    [return]      &{lead}
+
 API Create Opportunity
     [Documentation]  Creates opportunity of specified type for specified account. Opportunity details can be passed as key, value pairs
     ...              Sets defaults of StageName=Closed Won,CloseDate=current date,Amount=100, do not create payments as true if no values are passed.

@@ -17,50 +17,50 @@ Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
+  #Create fields to be mapped
   Create Customfield In Object Manager
   ...                                                    Object=Lead
   ...                                                    Field_Type=Lookup
   ...                                                    Related_To=Account
   ...                                                    Field_Name=Account Lookup
+
   Create Customfield In Object Manager
-  ...                                                    Object=Lead
+  ...                                                    Object=NPSP Data Import
   ...                                                    Field_Type=Text
   ...                                                    Field_Name=Lead Imported Status
+
   Create Customfield In Object Manager
-  ...                                                    Object=NPSP Import Object
+  ...                                                    Object=NPSP Data Import
   ...                                                    Field_Type=Text
   ...                                                    Field_Name=Lead Company
+
   Create Customfield In Object Manager
-  ...                                                    Object=NPSP Import Object
+  ...                                                    Object=NPSP Data Import
   ...                                                    Field_Type=Text
   ...                                                    Field_Name=Lead Last Name
- Create Customfield In Object Manager
-  ...                                                    Object=NPSP Import Object
+
+  Create Customfield In Object Manager
+  ...                                                    Object=NPSP Data Import
   ...                                                    Field_Type=Lookup
   ...                                                    Related_To=Lead
   ...                                                    Field_Name=Lead Lookup (Lead Object)
-    
 
-  #Create contact record with fields other than last name (include lookups and picklist)
-  #Use preferred email
+  #Create lead record with first name, last name, and company name
+  &{opp_lead} =                                         API Create Lead
+  ...                                                     FirstName=Test
+  ...                                                     LastName=User
+  ...                                                     Company=Generated Leads, Inc.
 
-  #Create lead record with company name
 
-  #Create org account record fields other than last
-
-  #Create Opportunity account with Description field filled in and stage
-
-  #Create CustomObject1 Record
-
-  ${template} =                                         Generate Random String
-  Set suite variable                                    ${template}
+  ${template_name} =                                    Generate Random String
+  Set suite variable                                    ${template_name}
 
 
 *** Test Cases ***
 Verify Fields Related to Lookups Populate on Batch Gift Entry Form
-  [Documentation]                                       Creates field mappings for lookups so related fields are populated on the
-  ...                                                   batch gift entry form.
-  [tags]                                                unstable  feature:GE  ticket_goes_here
+  [Documentation]                                       To be filled in
+  ...                                                   at a later date.
+  [tags]                                                unstable      feature:GE        ticket_goes_here
   #Create field mappings in Advanced Mapping
   Click Configure Advanced Mapping
 
@@ -70,25 +70,14 @@ Verify Fields Related to Lookups Populate on Batch Gift Entry Form
   Create Mapping If Doesnt Exist                        Lead Company (Lead_Company__c)  Company ()
   Reload Page
   Create Mapping If Doesnt Exist                        Lead Last Name (Lead_Last_Name__c)  Last Name ()
-  Go To Page                                            Landing                         GE_Gift_Entry  
+  Go To Page                                            Landing                GE_Gift_Entry  
   Click Link                                            Templates
   Click Gift Entry Button                               Create Template
-  Current Page Should Be                                Template                        GE_Gift_Entry
+  Current Page Should Be                                Template               GE_Gift_Entry
   Enter Value In Field
-  ...                                                   Template Name=${template}
-  ...                                                   Description=This is created by automation script  
+  ...                                                   Template Name=${template_name}
+  ...                                                   Description=This template is created by an automation script.
   Click Gift Entry Button                               Next: Form Fields
-  Perform Action on Object Field                        select  CustomObject1  C1_phone
-  Perform Action on Object Field                        select  CustomObject1  C1_text
-  Perform Action on Object Field                        select  Opportunity    Record Type ID
-  Perform Action on Object Field                        select  Opportunity    Donation Imported
-  Perform Action on Object Field                        select  Opportunity    Stage
   Perform Action on Object Field                        select  Lead           Lead Lookup
   Perform Action on Object Field                        select  Lead           Lead Company
   Perform Action on Object Field                        select  Lead           Lead Last Name
-  Fill Template Form
-  ...                                                   Data Import: Contact1 Imported=${contact_name}                                    
-
-
-  #Set template default to created contact to verify fields populate on form render
-
