@@ -115,5 +115,23 @@ class AdvancedMappingPage(BaseNPSPPage, BasePage):
             self.builtin.log(f"Field mapping doesn't exist, so creating")
             self.create_new_field_mapping(src_fld,tgt_fld)
         else :
-            self.builtin.log(f"Field mapping already exists, skipping creation") 
-  
+            self.builtin.log(f"Field mapping already exists, skipping creation")
+
+    @capture_screenshot_on_error
+    def create_new_object_group(self,obj_grp_name,obj_name_value):
+        """Click on Create New Object Group button on the page 
+        obj_group value is the Object Group to create"""
+        self.selenium.wait_until_page_contains("Object Groups", timeout=60)
+        btns=npsp_lex_locators['button-with-text'].format("Create New Object Group")
+        self.selenium.scroll_element_into_view(btns)
+        self.selenium.click_button(btns)
+        mdl_open=npsp_lex_locators['adv_mappings']["modal_open"]
+        self.selenium.wait_until_page_contains_element(mdl_open, timeout=15, 
+                            error="Create Object Group Modal did not open in 15 seconds")
+        name_fld=npsp_lex_locators['adv_mappings']['field_mapping'].format("masterLabel")
+        self.selenium.input_text(name_fld,obj_grp_name)
+        obj_name_fld=npsp_lex_locators['adv_mappings']['combobox']
+        self.selenium.wait_until_page_contains_element(obj_name_fld, error="Object Name field dropdown did not open")
+        obj_name_span=npsp_lex_locators['span'].format(obj_name_value)
+        element = self.selenium.driver.find_element_by_xpath(obj_name_span)
+        self.selenium.driver.execute_script('arguments[0].click()', element)

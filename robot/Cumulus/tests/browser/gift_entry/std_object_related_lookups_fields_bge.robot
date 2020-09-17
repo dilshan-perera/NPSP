@@ -12,9 +12,6 @@ Suite Setup     Run keywords
 ...             Enable Gift Entry
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
-*** Variables ***
-
-
 *** Keywords ***
 Setup Test Data
   #Create fields to be mapped
@@ -47,8 +44,8 @@ Setup Test Data
 
   #Create lead record with first name, last name, and company name
   &{opp_lead} =                                         API Create Lead
-  ...                                                     FirstName=Test
-  ...                                                     LastName=User
+  ...                                                     FirstName=${faker.first_name()}
+  ...                                                     LastName=${faker.last_name()}
   ...                                                     Company=Generated Leads, Inc.
 
 
@@ -60,12 +57,12 @@ Setup Test Data
 Verify Fields Related to Lookups Populate on Batch Gift Entry Form
   [Documentation]                                       To be filled in
   ...                                                   at a later date.
-  [tags]                                                unstable      feature:GE        ticket_goes_here
+  [tags]                                                unstable      feature:GE        W-043224
   #Create field mappings in Advanced Mapping
   Click Configure Advanced Mapping
+  Create New Object Group             Lead  Lead (Lead)
 
-  #keyword goes here to build new grouping
-
+  keyword goes here to build new grouping
   View Field Mappings Of The Object                     Lead
   Create Mapping If Doesnt Exist                        Lead Company (Lead_Company__c)  Company ()
   Reload Page
